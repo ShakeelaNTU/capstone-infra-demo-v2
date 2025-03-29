@@ -8,6 +8,12 @@ resource "aws_ecs_cluster" "app_cluster" {
   }
 }
 
+# CloudWatch Log Group for ECS Logging
+resource "aws_cloudwatch_log_group" "ecs_log_group" {
+  name              = "/ecs/${var.ecs_task_family}"  # Must match task definition
+  retention_in_days = 7
+}
+
 # ECS Task Definition for App
 resource "aws_ecs_task_definition" "app_task" {
   family                   = var.ecs_task_family
@@ -63,4 +69,5 @@ resource "aws_ecs_service" "register_app_service" {
     security_groups  = [aws_security_group.ecs_sg.id]
     assign_public_ip = var.assign_public_ip  # Assign public IP dynamically based on environment
   }
+  depends_on = [aws_cloudwatch_log_group.ecs_log_group]
 }
