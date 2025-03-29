@@ -1,6 +1,3 @@
-# Get AWS Account ID for dynamic ARN generation
-data "aws_caller_identity" "current" {}
-
 # ECS Task Role (Unique per environment)
 resource "aws_iam_role" "ecs_task_role" {
   name = "ecs-task-role-${var.environment}"
